@@ -1,7 +1,8 @@
-export class Trie{
+class Trie {
     constructor() {
         this.content = {}
     }
+
     getKeyObject(key, create = false) {
         key = key.toString()
 
@@ -52,3 +53,5 @@ export class Trie{
         return this
     }
 }
+
+module.exports = Trie

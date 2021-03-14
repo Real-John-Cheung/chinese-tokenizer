@@ -1,17 +1,19 @@
-import { Trie } from './trie.js'
+const {prettify} = require('prettify-pinyin')
+const Trie = require('./trie')
 
-export class Cedict {
-    parseLine(line) {
-        let match = line.match(/^(\S+)\s(\S+)\s\[([^\]]+)\]\s\/(.+)\//)
-        if (match == null) return
-    
-        let [, traditional, simplified, pinyin, english] = match
-    
-        pinyin = pinyin.replace(/u:/g, 'ü')
-    
-        return {traditional, simplified, pinyin, english}
-    }
+function parseLine(line) {
+    let match = line.match(/^(\S+)\s(\S+)\s\[([^\]]+)\]\s\/(.+)\//)
+    if (match == null) return
 
+    let [, traditional, simplified, pinyin, english] = match
+
+    pinyin = pinyin.replace(/u:/g, 'ü')
+    let pinyinPretty = prettify(pinyin)
+
+    return {traditional, simplified, pinyin, pinyinPretty, english}
+}
+
+class Cedict {
     load(contents) {
         this.simplifiedTrie = new Trie()
         this.traditionalTrie = new Trie()
@@ -21,7 +23,7 @@ export class Cedict {
         for (let line of lines) {
             if (line.trim() === '' || line[0] === '#') continue
 
-            let entry = this.parseLine(line)
+            let entry = parseLine(line)
             if (entry == null) continue
 
             this.simplifiedTrie.push(entry.simplified, entry)
@@ -37,3 +39,5 @@ export class Cedict {
         return traditional ? this.traditionalTrie.getPrefix(word) : this.simplifiedTrie.getPrefix(word)
     }
 }
+
+module.exports = Cedict

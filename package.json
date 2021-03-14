@@ -21,12 +21,16 @@
   },
   "homepage": "https://github.com/yishn/chinese-tokenizer",
   "scripts": {
-    "test": "tap tests/*.test.js"
+    "test": "tap tests/*.test.js",
+    "build": "rm ./dist/* & webpack"
   },
   "dependencies": {
+    "fs": "0.0.1-security",
     "prettify-pinyin": "^0.1.5"
   },
   "devDependencies": {
-    "tap": "^14.2.0"
+    "tap": "^14.2.0",
+    "webpack": "5.25.0",
+    "webpack-cli": "^4.5.0"
   }
 }
